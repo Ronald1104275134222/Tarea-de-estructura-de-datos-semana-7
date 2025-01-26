@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        string expression = "{7+(8*5)-[(9-7)+(4+1)]}";
+        
+        if (IsBalanced(expression))
+        {
+            Console.WriteLine("La fórmula está balanceada.");
+        }
+        else
+        {
+            Console.WriteLine("La fórmula no está balanceada.");
+        }
+    }
+
+    public static bool IsBalanced(string expression)
+    {
+        // Se utiliza una pila para verificar el balance de los paréntesis
+        Stack<char> stack = new Stack<char>();
+
+        // Recorremos la expresión carácter por carácter
+        foreach (char c in expression)
+        {
+            // Si encontramos un paréntesis de apertura, lo agregamos a la pila
+            if (c == '{' || c == '(' || c == '[')
+            {
+                stack.Push(c);
+            }
+            // Si encontramos un paréntesis de cierre, verificamos si hay un par correspondiente
+            if (c == '}' || c == ')' || c == ']')
+            {
+                // Si la pila está vacía o el par no es el correcto, la fórmula no está balanceada
+                if (stack.Count == 0)
+                    return false;
+
+                char top = stack.Pop();
+
+                if (c == '}' && top != '{' ||
+                    c == ')' && top != '(' ||
+                    c == ']' && top != '[')
+                {
+                    return false;
+                }
+            }
+        }
+
+        // Si la pila está vacía al final, todos los paréntesis están balanceados
+        return stack.Count == 0;
+    }
+}
