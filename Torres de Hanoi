@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        int numberOfDisks = 3; // Puedes cambiar este valor para probar con más discos
+
+        // Inicializamos las pilas para cada torre
+        Stack<int> source = new Stack<int>();
+        Stack<int> auxiliary = new Stack<int>();
+        Stack<int> destination = new Stack<int>();
+
+        // Llenamos la torre de origen con los discos
+        for (int i = numberOfDisks; i > 0; i--)
+        {
+            source.Push(i);
+        }
+
+        // Imprimimos las pilas antes de comenzar
+        Console.WriteLine("Estado inicial:");
+        PrintTowers(source, auxiliary, destination);
+
+        // Llamamos al algoritmo para mover los discos
+        SolveHanoi(numberOfDisks, source, destination, auxiliary);
+
+        // Imprimimos el estado final
+        Console.WriteLine("\nEstado final:");
+        PrintTowers(source, auxiliary, destination);
+    }
+
+    // Función para resolver las Torres de Hanoi
+    public static void SolveHanoi(int n, Stack<int> source, Stack<int> destination, Stack<int> auxiliary)
+    {
+        if (n == 1)
+        {
+            // Mover el disco de la torre fuente a la torre destino
+            destination.Push(source.Pop());
+            Console.WriteLine($"Mover disco de {nameof(source)} a {nameof(destination)}");
+            PrintTowers(source, auxiliary, destination);
+        }
+        else
+        {
+            // Mover los n-1 discos a la torre auxiliar
+            SolveHanoi(n - 1, source, auxiliary, destination);
+
+            // Mover el disco restante a la torre destino
+            destination.Push(source.Pop());
+            Console.WriteLine($"Mover disco de {nameof(source)} a {nameof(destination)}");
+            PrintTowers(source, auxiliary, destination);
+
+            // Mover los n-1 discos de la torre auxiliar a la torre destino
+            SolveHanoi(n - 1, auxiliary, destination, source);
+        }
+    }
+
+    // Función para imprimir el estado actual de las torres
+    public static void PrintTowers(Stack<int> source, Stack<int> auxiliary, Stack<int> destination)
+    {
+        Console.WriteLine($"Torre de origen: {string.Join(", ", source)}");
+        Console.WriteLine($"Torre auxiliar: {string.Join(", ", auxiliary)}");
+        Console.WriteLine($"Torre destino: {string.Join(", ", destination)}");
+        Console.WriteLine();
+    }
+}
